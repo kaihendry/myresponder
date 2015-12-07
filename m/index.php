@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>First responders</title>
+<title>Management</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -85,13 +85,11 @@
 </tr>
 
 
-
-
-
 </tbody>
 </table>
 
 
+<?php require("logs.php"); ?>
 
 </body>
 </html>
