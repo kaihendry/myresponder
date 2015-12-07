@@ -1,6 +1,8 @@
+<h3>Web logs</h3>
 <?php
 
 // /var/log/php-fpm/www-error.log
+//
 
 echo "<ul id=wwwlogs>\n";
 $d = array("g", "h", "m");

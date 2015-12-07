@@ -21,35 +21,10 @@ require("common.php");
 
 <form action=/clockin.php method=GET autocomplete=on>
 
-<!-- https://en.wikipedia.org/wiki/Malaysian_identity_card -->
 <input required name=ic placeholder="IC">
-
 <input required name=name placeholder="Name">
 <input required name=tel type=tel placeholder="Mobile number">
-
 <input type=submit value="Clock in">
-
 </form>
-
-<h3>Clocked in users</h3>
-<ol>
-<?php
-foreach (glob("r/*.json") as $responder) {
-	echo "<li>" . display($responder) . "</li>";
-}
-?>
-</ol>
-
-<!-- PHP SESSIONS
-<?php
-foreach (glob(session_save_path() . "/*") as $activesession) {
-	echo "<li>" . basename($activesession) . "</li>\n";
-}
-?>
--->
-
-<p>Total shifts: <?php echo `find -mindepth 3  -name '*.json' | wc -l`;?></p>
-
-<p><a href=https://github.com/kaihendry/clockin>MIT licensed source code</a></p>
 </body>
 </html>

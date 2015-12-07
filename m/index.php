@@ -89,7 +89,11 @@
 </table>
 
 
-<?php require("logs.php"); ?>
+<?php
+include("homeownerlogs.php");
+include("guardlogs.php");
+include("wwwlogs.php");
+?>
 
 </body>
 </html>
