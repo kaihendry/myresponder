@@ -1,6 +1,44 @@
 <?php
 session_start();
-require("common.php");
+
+// http://stackoverflow.com/a/6534559/4534
+function getNiceDuration($durationInSeconds) {
+
+  $duration = '';
+  $days = floor($durationInSeconds / 86400);
+  $durationInSeconds -= $days * 86400;
+  $hours = floor($durationInSeconds / 3600);
+  $durationInSeconds -= $hours * 3600;
+  $minutes = floor($durationInSeconds / 60);
+  $seconds = $durationInSeconds - $minutes * 60;
+
+  if($days > 0) {
+    $duration .= $days . ' days';
+  }
+  if($hours > 0) {
+    $duration .= ' ' . $hours . ' hours';
+  }
+  if($minutes > 0) {
+    $duration .= ' ' . $minutes . ' minutes';
+  }
+  if($seconds > 0) {
+    $duration .= ' ' . $seconds . ' seconds';
+  }
+  return $duration;
+}
+
+function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
+
+function display($r) {
+	$json = json_decode(file_get_contents($r), true);
+	if (isset($json["outtime"])) {
+		$ft = date("c", $json["outtime"]);
+		return "<a href=$r><time dateTime=$ft>$ft</time> lasting " . getNiceDuration($json["outtime"] - $json["intime"]) . "</a>";
+	} else {
+		$ft = date("c", $json["intime"]);
+		return "<a href=$r>" . e($json["name"]) . " on duty since <time dateTime=$ft>$ft</time> with mobile number " . e($json["tel"]) . "</a>";
+	}
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -57,10 +95,12 @@ if (file_exists($p)) {
 
 <h1><a href=/clockout.php>Clock out</a></h1>
 
-<h3>Previous sessions</h3>
+<h3>Previous clock outs</h3>
 <ul>
 <?php
-foreach (glob($rdir . "/*.json") as $shifts) {
+$history = glob($rdir . "/*.json");
+rsort($history);
+foreach ($history as $shifts) {
 	echo "<li>" . display($shifts) . "</li>";
 }
 ?>

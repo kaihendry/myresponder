@@ -98,7 +98,7 @@ if (file_exists($p)) {
 		echo "<p>Your alert is muted until management approve. Please save this link to your home screen.</p>";
 	} else {
 		// ALERT ALERT ALERT ALERT ALERT
-		echo "<p>Raising alert to all guards on duty:</p>";
+		echo "<p>Raising alert to all responders on duty:</p>";
 		alert($id);
 	}
 } else {
@@ -113,7 +113,6 @@ if (file_exists($p)) {
 }
 
 ?>
-
 
 <dl>
     <dt>Name</dt>
