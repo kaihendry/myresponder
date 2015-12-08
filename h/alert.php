@@ -5,7 +5,8 @@ function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
 function je( $obj ){ return json_encode($obj, JSON_PRETTY_PRINT); }
 
 function alert($id) {
-	$alog = "r/$id/alert/" . time() . ".json";
+	$ts = time();
+	$alog = "r/$id/alert/" . $ts . ".json";
 	@mkdir(dirname($alog), 0777, true);
 
 	$ch = curl_init();
@@ -16,7 +17,8 @@ function alert($id) {
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
 		echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
-		$url = "http://feedback.dabase.com/mail.php?api_key=6adec75d&api_secret=$alog&from=MYRESP&to=" . $g["tel"] . "&text=" . urlencode($g["name"]);
+		$url = "http://feedback.dabase.com/mail.php?api_key=6adec75d&api_secret=$alog&from=MYRESP&to=" . $g["tel"] .
+			"&text=" . urlencode("RESPOND: " . $_SESSION["address"] . " " . $_SESSION["name"] . " tel:" . $_SESSION["tel"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
 		$result=curl_exec($ch);
 		$info = curl_getinfo($ch);
@@ -112,15 +114,27 @@ if (file_exists($p)) {
 
 ?>
 
+
+<dl>
+    <dt>Name</dt>
+    <dd><?php echo $_SESSION["name"];?></dd>
+    <dt>Address</dt>
+    <dd><?php echo $_SESSION["address"];?></dd>
+    <dt>Telephone</dt>
+    <dd><?php echo $_SESSION["tel"];?></dd>
+</dl>
+
 <p><a href=/logout.php>Change details</a></p>
 
 <h3>Alert history</h3>
-<ul>
+<ol>
 <?php
-foreach (glob("r/$id/alert/*.json") as $alog) {
+$history = glob("r/$id/alert/*.json");
+rsort($history);
+foreach ($history as $alog) {
 	echo "<li><a href=$alog>" . date("r", basename($alog, ".json")) . "</a></li>";
 }
 ?>
-</ul>
+</ol>
 </body>
 </html>
