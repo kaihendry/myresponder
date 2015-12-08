@@ -6,7 +6,6 @@ if ($_SESSION["ic"]) {
 	header('Location: ' . $url . "/clockin.php");
 	die();
 }
-require("common.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -26,5 +25,9 @@ require("common.php");
 <input required name=tel type=tel placeholder="Mobile number">
 <input type=submit value="Clock in">
 </form>
+<p>Responders on duty:
+<?php echo count(glob("r/*.json")); ?>
+</p>
+
 </body>
 </html>
