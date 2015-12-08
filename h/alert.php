@@ -1,12 +1,36 @@
 <?php
 session_start();
+
 function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
+function je( $obj ){ return json_encode($obj, JSON_PRETTY_PRINT); }
 
 function display($r) {
 	$json = json_decode(file_get_contents($r), true);
 	$ft = date("c", $json["intime"]);
 	return "<a href=$r>" . e($json["name"]) . " registered upon <time dateTime=$ft>$ft</time> with mobile number " . e($json["tel"]) . "</a>";
 }
+
+function alert($id) {
+	$alog = "r/$id/alert/" . time() . ".json";
+	if (!mkdir(dirname($alog), 0777, true)) {
+		die('Failed to create dir ' . dirname($alog)); // Argh, this should never ever happen.
+	}
+
+	$url = "http://feedback.dabase.com/mail.php?api_key=6adec75d&api_secret=$alog&from=MYRESP&to=60134616213&text=Hello+there";
+	$ch = curl_init();
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_URL,$url);
+	$result=curl_exec($ch);
+	$info = curl_getinfo($ch);
+	$errinfo = curl_error($ch);
+	curl_close($ch);
+	$resp = json_decode($result, true);
+	file_put_contents($alog, je(array("info" => $info, "error" => $errinfo, "response" => $resp)));
+	echo "<h1>Alerted $alog</h1>";
+
+	// Now mute until management lift it
+	// touch ("muted/$id");
+	}
 
 if (isset($_GET["ic"])) {
 	$_SESSION["ic"] =  preg_replace("/[^0-9]/", "", $_GET["ic"]);
@@ -59,7 +83,7 @@ if (file_exists($p)) {
 	} else {
 		// ALERT ALERT ALERT ALERT ALERT
 		echo "<p>Raising alert to all guards on duty</p>";
-		// alert($id);
+		alert($id);
 		echo "<p>" . display($p) . "</p>";
 	}
 } else {
@@ -69,7 +93,7 @@ if (file_exists($p)) {
 	$ci["intime"] = time();
 	// Save server info (might be useful)
 	$ci["sin"] = $_SERVER;
-	file_put_contents($p, json_encode($ci, JSON_PRETTY_PRINT));
+	file_put_contents($p, je($ci));
 	echo "<p>" . display($p) . "</p>";
 	// TODO: Mail management WRT new registration that needs to be un-muted
 }
