@@ -4,28 +4,36 @@ session_start();
 function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
 function je( $obj ){ return json_encode($obj, JSON_PRETTY_PRINT); }
 
-function display($r) {
-	$json = json_decode(file_get_contents($r), true);
-	$ft = date("c", $json["intime"]);
-	return "<a href=$r>" . e($json["name"]) . " registered upon <time dateTime=$ft>$ft</time> with mobile number " . e($json["tel"]) . "</a>";
-}
-
 function alert($id) {
 	$alog = "r/$id/alert/" . time() . ".json";
-	if (!mkdir(dirname($alog), 0777, true)) {
-		die('Failed to create dir ' . dirname($alog)); // Argh, this should never ever happen.
-	}
+	@mkdir(dirname($alog), 0777, true);
 
-	$url = "http://feedback.dabase.com/mail.php?api_key=6adec75d&api_secret=$alog&from=MYRESP&to=60134616213&text=Hello+there";
 	$ch = curl_init();
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_URL,$url);
-	$result=curl_exec($ch);
-	$info = curl_getinfo($ch);
-	$errinfo = curl_error($ch);
+
+	echo "<ul>";
+	$guards = array();
+	foreach (glob("../g/r/*.json") as $gj) {
+		$g = json_decode(file_get_contents($gj), true);
+		echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
+		$url = "http://feedback.dabase.com/mail.php?api_key=6adec75d&api_secret=$alog&from=MYRESP&to=" . $g["tel"] . "&text=" . urlencode($g["name"]);
+		curl_setopt($ch, CURLOPT_URL, $url);
+		$result=curl_exec($ch);
+		$info = curl_getinfo($ch);
+
+		// Nasty crap to remove api secret
+		$p = parse_url($info["url"], PHP_URL_QUERY);
+		parse_str($p, $query_params);
+		unset($query_params["api_secret"]);
+		$info["url"] = $query_params;
+
+		$errinfo = curl_error($ch);
+		array_push($guards, array("result" => $result, "info" => $info, "error" => $errinfo));
+	}
+	echo "</ul>";
+
 	curl_close($ch);
-	$resp = json_decode($result, true);
-	file_put_contents($alog, je(array("info" => $info, "error" => $errinfo, "response" => $resp)));
+	file_put_contents($alog, je(array("guards" => $guards)));
 	echo "<h1>Alerted $alog</h1>";
 
 	// Now mute until management lift it
@@ -69,9 +77,6 @@ $p = "r/$id.json";
 </head>
 <body>
 <?php
-if (empty($_SESSION["ic"])) {
-	die("<a href=/>Click Here to Login</a>");
-}
 
 if (! file_exists($rdir)) {
 	if (!mkdir($rdir, 0777, true)) {
@@ -91,9 +96,8 @@ if (file_exists($p)) {
 		echo "<p>Your alert is muted until management approve. Please save this link to your home screen.</p>";
 	} else {
 		// ALERT ALERT ALERT ALERT ALERT
-		echo "<p>Raising alert to all guards on duty</p>";
+		echo "<p>Raising alert to all guards on duty:</p>";
 		alert($id);
-		echo "<p>" . display($p) . "</p>";
 	}
 } else {
 	echo "<p>Registering your alert with management</p>";
@@ -103,7 +107,6 @@ if (file_exists($p)) {
 	// Save server info (might be useful)
 	$ci["sin"] = $_SERVER;
 	file_put_contents($p, je($ci));
-	echo "<p>" . display($p) . "</p>";
 	// TODO: Mail management WRT new registration that needs to be un-muted
 }
 
