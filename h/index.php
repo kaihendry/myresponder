@@ -1,12 +1,11 @@
 <?php
 session_start();
-if ($_SESSION["ic"]) {
+if ($_SESSION["address"]) {
 	// If there is an existing session, do not bother to login
 	$url = 'http://' . $_SERVER['HTTP_HOST'];
-	header('Location: ' . $url . "/clockin.php");
+	header('Location: ' . $url . "/alert.php");
 	die();
 }
-require("common.php");
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,7 +18,7 @@ require("common.php");
 </head>
 <body>
 
-<form action=/clockin.php method=GET autocomplete=on>
+<form action=/alert.php method=GET autocomplete=on>
 
 <!-- https://en.wikipedia.org/wiki/Malaysian_identity_card -->
 <input required name=ic placeholder="IC">

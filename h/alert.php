@@ -1,0 +1,90 @@
+<?php
+session_start();
+function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
+
+function display($r) {
+	$json = json_decode(file_get_contents($r), true);
+	$ft = date("c", $json["intime"]);
+	return "<a href=$r>" . e($json["name"]) . " registered upon <time dateTime=$ft>$ft</time> with mobile number " . e($json["tel"]) . "</a>";
+}
+
+if (isset($_GET["ic"])) {
+	$_SESSION["ic"] =  preg_replace("/[^0-9]/", "", $_GET["ic"]);
+	$_SESSION["name"] = substr($_GET["name"], 0, 64);
+	$_SESSION["address"] = substr($_GET["address"], 0, 64);
+	$_SESSION["tel"] = preg_replace("/[^0-9]/", "", $_GET["tel"]);
+}
+
+if(! is_numeric($_SESSION["ic"])) { session_destroy(); die("Invalid IC"); }
+if(empty($_SESSION["address"])) { session_destroy(); die("Invalid Address"); }
+if(! is_numeric($_SESSION["tel"])) { session_destroy(); die("Invalid telephone"); }
+
+$id = $_SESSION["ic"];
+// Record directory, to track when they change details on logout (kinda pointless?)
+$rdir = "r/$id";
+// Current active alert
+$p = "r/$id.json";
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Alert for <?php echo $_SESSION["name"]; ?></title>
+<meta name=viewport content="width=device-width, initial-scale=1">
+<link href="/style.css" rel="stylesheet">
+</head>
+<body>
+<?php
+if (empty($_SESSION["ic"])) {
+	die("<a href=/>Click Here to Login</a>");
+}
+
+if (! file_exists($rdir)) {
+	if (!mkdir($rdir, 0777, true)) {
+		die('Failed to create dir ' . $rdir);
+	} else {
+		// First seen
+		echo '<h1>Welcome ' . e($_SESSION["name"]) . '</h1>';
+		touch ("muted/$id");
+	}
+}
+
+if (file_exists($p)) {
+	if (file_exists("muted/$id")) {
+		// Add to home screen code goes here
+		// https://developers.google.com/web/updates/2015/03/increasing-engagement-with-app-install-banners-in-chrome-for-android?hl=en
+		// http://cubiq.org/add-to-home-screen
+		echo "<p>Your alert is muted until management approve. Please save this link to your homepage.</p>";
+	} else {
+		// ALERT ALERT ALERT ALERT ALERT
+		echo "<p>Raising alert to all guards on duty</p>";
+		// alert($id);
+		echo "<p>" . display($p) . "</p>";
+	}
+} else {
+	echo "<p>Registering your alert with management</p>";
+	// Clock in
+	$ci = $_SESSION;
+	$ci["intime"] = time();
+	// Save server info (might be useful)
+	$ci["sin"] = $_SERVER;
+	file_put_contents($p, json_encode($ci, JSON_PRETTY_PRINT));
+	echo "<p>" . display($p) . "</p>";
+	// TODO: Mail management WRT new registration that needs to be un-muted
+}
+
+?>
+
+<p><a href=/logout.php>Change details</a></p>
+
+<h3>Alert logs</h3>
+<ul>
+<?php
+
+// r/ic/alert/epoch.json
+
+?>
+</ul>
+</body>
+</html>
