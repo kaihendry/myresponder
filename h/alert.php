@@ -43,6 +43,15 @@ if(! is_numeric($_SESSION["ic"])) { session_destroy(); die("Invalid IC"); }
 if(empty($_SESSION["address"])) { session_destroy(); die("Invalid Address"); }
 if(! is_numeric($_SESSION["tel"])) { session_destroy(); die("Invalid telephone"); }
 
+if (empty($_GET["ic"])) { // We need to ensure we are always a GET request to ensure URL for Adding to home screen is good
+	$data = array('ic'=> $_SESSION["ic"],
+		'name'=> $_SESSION["name"],
+		'address'=> $_SESSION["address"],
+		'tel'=> $_SESSION["tel"]);
+	$url = 'http://' . $_SERVER['HTTP_HOST'] . "/alert.php?" . http_build_query($data);
+	header('Location: ' . $url);
+}
+
 $id = $_SESSION["ic"];
 // Record directory, to track when they change details on logout (kinda pointless?)
 $rdir = "r/$id";
@@ -79,7 +88,7 @@ if (file_exists($p)) {
 		// Add to home screen code goes here
 		// https://developers.google.com/web/updates/2015/03/increasing-engagement-with-app-install-banners-in-chrome-for-android?hl=en
 		// http://cubiq.org/add-to-home-screen
-		echo "<p>Your alert is muted until management approve. Please save this link to your homepage.</p>";
+		echo "<p>Your alert is muted until management approve. Please save this link to your home screen.</p>";
 	} else {
 		// ALERT ALERT ALERT ALERT ALERT
 		echo "<p>Raising alert to all guards on duty</p>";
@@ -102,12 +111,12 @@ if (file_exists($p)) {
 
 <p><a href=/logout.php>Change details</a></p>
 
-<h3>Alert logs</h3>
+<h3>Alert history</h3>
 <ul>
 <?php
-
-// r/ic/alert/epoch.json
-
+foreach (glob("r/$id/alert/*.json") as $alog) {
+	echo "<li><a href=$alog>" . date("r", basename($alog, ".json")) . "</a></li>";
+}
 ?>
 </ul>
 </body>
