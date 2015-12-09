@@ -21,7 +21,7 @@ if (file_exists($p)) {
 	file_put_contents($rdir . "/" . $json["outtime"] .  ".json", json_encode($json, JSON_PRETTY_PRINT));
 	unlink($p);
 } else {
-	die ("You weren't clocked in!");
+	die ("You weren't registered!");
 }
 
 // Unset all of the session variables.

@@ -1,31 +1,33 @@
 <?php
-include("../h/common.php");
+require_once("../config.php");
+
+$alerts = glob("../h/r/*/alert/*.json");
+rsort($alerts);
 ?>
 
-<p>Total records of incidents: <?php echo `find ../h -mindepth 3 -name '*.json' | wc -l`;?></p>
-
-<h3>Log of events</h3>
+<h3>Log of alerts</h3>
 <ol>
 <?php
-$items = glob('../h/r/*/*.json', GLOB_NOSORT);
-array_multisort(array_map('filemtime', $items), SORT_NUMERIC, SORT_DESC, $items);
-foreach ($items as $fn) {
-	$wfn = substr($fn, 5);
-	echo "<li><a href=//h.uptown.dabase.com/" . $wfn . ">";
-	echo  basename($fn) . " log size " . filesize($fn) . ", last modified " . date("c", filemtime($fn));
-	echo "</a></li>\n";
+foreach ($alerts as $aj) {
+	echo "<li><a href=//h.$HOST/r/" . substr($aj, 7) . ">" . date("r", basename($aj, ".json")) . "</a>";
+	echo "</li>";
 }
 ?>
 </ol>
 
-<h3>Registered home owners with alarms enabled</h3>
+<h3>Registered home owners</h3>
 
 <ol>
 <?php
-foreach (glob("../h/r/*.json") as $responder) {
-	echo "<li>" . display($responder) . "</li>";
+foreach (glob("../h/r/*.json") as $hoj) {
+	$ho = json_decode(file_get_contents($hoj), true);
+	echo "<li><a href=//h.$HOST/r/" . basename($hoj) . ">" . date("r", $ho["intime"]) . "</a> " . $ho["name"];
+	if (file_exists("../h/muted/" . $ho["ic"])) {
+		echo "MUTED";
+	} else {
+		echo "ACTIVE";
+	}
+	echo "</li>";
 }
 ?>
 </ol>
-
-

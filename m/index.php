@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <title>Management</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
+<link href="http://uptown.dabase.com/style.css" rel="stylesheet">
 </head>
 <body>
 
@@ -43,56 +44,10 @@
 </tbody>
 </table>
 
-<table>
-<caption>Security on Duty</caption>
-<thead>
-<tr>
-<th>Last seen</th>
-<th>Name</th>
-<th>Notification method</th>
-</tr>
-</thead>
-<tbody>
-
-<tr>
-<td>4hr5m</td>
-<td>Mr Green</td>
-<td><a href=#log>030-667563</a></td>
-</tr>
-
-<tr>
-<td>5hr55m</td>
-<td>Mr Mustard</td>
-<td><a href=#log>030-123563</a></td>
-</tr>
-
-<tr>
-<td>6hr5m</td>
-<td>Mr Black</td>
-<td><a href=#log>Pushover</a></td>
-</tr>
-
-<tr class=inactive>
-<td>Logged out 2015-11-29 5PM (8hr2m shift)</td>
-<td>Mr Brown</td>
-<td><a href=#log>030-343456</a></td>
-</tr>
-
-<tr class=inactive>
-<td>Timed out 2015-11-29 5PM (7hr2m shift)</td>
-<td>Mr Pink</td>
-<td><a href=#log>03-2314235</a></td>
-</tr>
-
-
-</tbody>
-</table>
-
-
 <?php
-include("homeownerlogs.php");
 include("guardlogs.php");
-include("wwwlogs.php");
+include("homeownerlogs.php");
+//include("wwwlogs.php");
 ?>
 
 </body>

@@ -1,11 +1,15 @@
 <?php
 session_start();
+require_once("../config.php");
 
 function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
 function je( $obj ){ return json_encode($obj, JSON_PRETTY_PRINT); }
 
 function alert($id) {
+	global $URL;
 	$ts = time();
+	echo "<h3>Time now: " . date("c") . "</h3>";
+	echo "<p>Raising alert to all responders on duty:</p>";
 	$alog = "r/$id/alert/" . $ts . ".json";
 	@mkdir(dirname($alog), 0777, true);
 
@@ -17,10 +21,10 @@ function alert($id) {
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
 		echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
-		$url = "http://feedback.dabase.com/mail.php?api_key=6adec75d&api_secret=$alog&from=MYRESP&to=" . $g["tel"] .
-			"&text=" . urlencode("RESPOND: " . $_SESSION["address"] . " " . $_SESSION["name"] . " tel:" . $_SESSION["tel"] . " at " . date("c", $ts));
+		$url = $URL . "&from=MYRESP&to=" . $g["tel"] .
+			"&text=" . urlencode("⚠" . $_SESSION["address"] . " " . $_SESSION["name"] . " tel:" . $_SESSION["tel"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
-		$result=curl_exec($ch);
+		// $result=curl_exec($ch);
 		$info = curl_getinfo($ch);
 
 		// Nasty crap to remove api secret
@@ -35,8 +39,7 @@ function alert($id) {
 	echo "</ul>";
 
 	curl_close($ch);
-	file_put_contents($alog, je(array("guards" => $guards)));
-	echo "<h1>Alerted $alog</h1>";
+	file_put_contents($alog, je(array("guards" => $guards, "raiser" => $_SESSION)));
 
 	// Now mute until management lift it
 	// touch ("muted/$id");
@@ -76,6 +79,8 @@ $p = "r/$id.json";
 <title>Alert for <?php echo $_SESSION["name"]; ?></title>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <link href="/style.css" rel="stylesheet">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="icon" sizes="180x180" href="/apple-touch-icon.png">
 </head>
 <body>
 <?php
@@ -92,17 +97,13 @@ if (! file_exists($rdir)) {
 
 if (file_exists($p)) {
 	if (file_exists("muted/$id")) {
-		// Add to home screen code goes here
-		// https://developers.google.com/web/updates/2015/03/increasing-engagement-with-app-install-banners-in-chrome-for-android?hl=en
-		// http://cubiq.org/add-to-home-screen
-		echo "<p>Your alert is muted until management approve. Please save this link to your home screen.</p>";
+		echo "<p>Your alert is muted until management approve. Please save this link to your home screen if you haven't done already.</p>";
 	} else {
 		// ALERT ALERT ALERT ALERT ALERT
-		echo "<p>Raising alert to all responders on duty:</p>";
 		alert($id);
 	}
 } else {
-	echo "<p>Registering your alert with management</p>";
+	echo "<p>Registering your alert with management. Please save this link to your home screen if you haven't done already.</p>";
 	// Clock in
 	$ci = $_SESSION;
 	$ci["intime"] = time();
