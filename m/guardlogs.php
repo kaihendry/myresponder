@@ -19,7 +19,7 @@ foreach (glob("../g/r/*.json") as $rfn) {
 	$r = json_decode(file_get_contents($rfn), true);
 ?>
 <tr>
-<td><?php echo "<a href=//g.$HOST/". substr($rfn, 5) . ">" . date("r", $r['intime']); ?></a></td>
+<td><?php echo "<a href=//g.$HOST/". substr($rfn, 5) . "><time datetime=" . date("c", $r['intime']) . ">" . date("c", $r['intime']) . "</time>"; ?></a></td>
 <td><?=$r['name']?></td>
 <td><a href=tel:<?=$r['tel']?>><?=$r['tel']?></a></td>
 </tr>
