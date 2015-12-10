@@ -1,2 +1,10 @@
 body { font-family: sans-serif; }
 .muted { text-decoration: line-through; }
+.armed { background-color: pink; }
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th { text-align: left; }

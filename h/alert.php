@@ -20,14 +20,15 @@ function alert($id) {
 	$guards = array();
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
-		$url = $URL . "&from=MYRESP&to=" . $g["tel"] .
+		// https://docs.nexmo.com/api-ref/sms-api/request
+		$url = $URL . "&from=MYRESP&type=unicode&to=" . $g["tel"] .
 			"&text=" . urlencode("⚠" . $_SESSION["address"] . " " . $_SESSION["name"] . " tel:" . $_SESSION["tel"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
 		if (file_exists("muted/$id")) {
 		echo "<li><s>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></s></li>";
 		} else {
 		echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
-		$result=curl_exec($ch);
+		$result=json_decode(curl_exec($ch), true);
 		}
 		$info = curl_getinfo($ch);
 

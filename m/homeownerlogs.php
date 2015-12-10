@@ -9,8 +9,10 @@ rsort($alerts);
 <caption>Registered home owners</caption>
 <thead>
 <tr>
+<th></th>
 <th>Time</th>
 <th>Name</th>
+<th>Address</th>
 <th>Telephone</th>
 <th></th>
 </tr>
@@ -21,13 +23,15 @@ rsort($alerts);
 foreach (glob("../h/r/*.json") as $hoj) {
 	$ho = json_decode(file_get_contents($hoj), true);
 ?>
-<tr>
+<tr <?php echo (file_exists("../h/muted/" . $ho["ic"]) ? 'class=unarmed' : 'class=armed');?>>
+<td><a style="text-decoration:none;" href=http://h.uptown.dabase.com/alert.php?<?php echo urlencode(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>>⚠</a></td>
 <td>
 <?php
 $ft = date("c", $ho["intime"]);
 echo "<a href=//h.$HOST/r/" . basename($hoj) . "><time datetime=$ft>$ft</time></a>"; ?>
 </td>
 <td><?=$ho['name']?></td>
+<td><?=$ho['address']?></td>
 <td><a href=tel:<?=$ho['tel']?>><?=$ho['tel']?></a></td>
 <td><button data-id=<?=$ho['ic']?>><?php echo (file_exists("../h/muted/" . $ho["ic"]) ? 'Unmute' : 'Mute') . "</button>";?></td>
 </tr>
