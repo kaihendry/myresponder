@@ -9,7 +9,7 @@ rsort($alerts);
 <caption>Registered home owners</caption>
 <thead>
 <tr>
-<th>Last seen</th>
+<th>Time</th>
 <th>Name</th>
 <th>Telephone</th>
 <th></th>
@@ -22,7 +22,11 @@ foreach (glob("../h/r/*.json") as $hoj) {
 	$ho = json_decode(file_get_contents($hoj), true);
 ?>
 <tr>
-<td><?php echo "<a href=//h.$HOST/r/" . basename($hoj) . ">" . date("c", $ho["intime"]); ?></a></td>
+<td>
+<?php
+$ft = date("c", $ho["intime"]);
+echo "<a href=//h.$HOST/r/" . basename($hoj) . "><time datetime=$ft>$ft</time></a>"; ?>
+</td>
 <td><?=$ho['name']?></td>
 <td><a href=tel:<?=$ho['tel']?>><?=$ho['tel']?></a></td>
 <td><button data-id=<?=$ho['ic']?>><?php echo (file_exists("../h/muted/" . $ho["ic"]) ? 'Unmute' : 'Mute') . "</button>";?></td>
@@ -34,16 +38,38 @@ foreach (glob("../h/r/*.json") as $hoj) {
 </tbody>
 </table>
 
-<h3>Log of alerts</h3>
-<ol>
+<table>
+<caption>Incidents</caption>
+<thead>
+<tr>
+<th>Time</th>
+<th>Name</th>
+<th>Address</th>
+<th>Telephone</th>
+</tr>
+</thead>
+<tbody>
+
+
+
 <?php
 foreach ($alerts as $aj) {
 	$a = json_decode(file_get_contents($aj), true);
-	echo "<li><a href=//h.$HOST/r/" . substr($aj, 7) . ">" . date("r", basename($aj, ".json")) . "</a>";
-	echo ($a["raiser"]["name"] . " " . $a["raiser"]["address"] . " " . $a["raiser"]["tel"]);
-	echo "</li>";
+?>
+<tr <?php echo ((empty($a["guards"][0]["result"]) ? "class=muted" : "")); ?>>
+<td>
+<?php
+$ft = date("c", basename($aj, ".json"));
+echo "<a href=//h.$HOST/r/" . substr($aj, 7) . "><time datetime=$ft>$ft</time></a>"; ?>
+</td>
+<td><?=$a["raiser"]["name"]?></td>
+<td><?=$a["raiser"]["address"]?></td>
+<td><a href=tel:<?=$a["raiser"]["tel"]?>><?=$a["raiser"]["tel"]?></a></td>
+</tr>
+<?php
 }
 ?>
-</ol>
+</tbody>
+</table>
 
 

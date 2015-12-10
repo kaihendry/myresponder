@@ -20,11 +20,15 @@ function alert($id) {
 	$guards = array();
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
-		echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
 		$url = $URL . "&from=MYRESP&to=" . $g["tel"] .
 			"&text=" . urlencode("⚠" . $_SESSION["address"] . " " . $_SESSION["name"] . " tel:" . $_SESSION["tel"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
-		// $result=curl_exec($ch);
+		if (file_exists("muted/$id")) {
+		echo "<li><s>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></s></li>";
+		} else {
+		echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
+		$result=curl_exec($ch);
+		}
 		$info = curl_getinfo($ch);
 
 		// Nasty crap to remove api secret
@@ -42,7 +46,7 @@ function alert($id) {
 	file_put_contents($alog, je(array("guards" => $guards, "raiser" => $_SESSION)));
 
 	// Now mute until management lift it
-	// touch ("muted/$id");
+	touch ("muted/$id");
 	}
 
 if (isset($_GET["ic"])) {
@@ -96,12 +100,7 @@ if (! file_exists($rdir)) {
 }
 
 if (file_exists($p)) {
-	if (file_exists("muted/$id")) {
-		echo "<p>Your alert is muted until management approve. Please save this link to your home screen if you haven't done already.</p>";
-	} else {
-		// ALERT ALERT ALERT ALERT ALERT
 		alert($id);
-	}
 } else {
 	echo "<p>Registering your alert with management. Please save this link to your home screen if you haven't done already.</p>";
 	// Clock in

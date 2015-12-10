@@ -20,4 +20,11 @@ window.addEventListener('load', function() {
 			r.send(formData);
 		});
 	}
+
+var timings = document.getElementsByTagName("time");
+for (var i = 0; i < timings.length; i++) {
+	  var arr = new Date(timings[i].getAttribute("datetime"));
+	    timings[i].innerHTML = moment(arr).fromNow();
+}
+
 });
