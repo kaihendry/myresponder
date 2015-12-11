@@ -4,12 +4,17 @@ require_once("../config.php");
 
 function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
 function je( $obj ){ return json_encode($obj, JSON_PRETTY_PRINT); }
+function my_number( $n ){ return (substr($n, 0, 1) == 0) ? "6$n" : $n; }
 
 function alert($id) {
 	global $URL;
 	$ts = time();
 	echo "<h3>Time now: " . date("c") . "</h3>";
+	if (file_exists("muted/$id")) {
+	echo "<p>Your alert was un-armed. No guards were alerted. Please contact management.</p>";
+		} else {
 	echo "<p>Raising alert to all responders on duty:</p>";
+	}
 	$alog = "r/$id/alert/" . $ts . ".json";
 	@mkdir(dirname($alog), 0777, true);
 
@@ -21,8 +26,8 @@ function alert($id) {
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
 		// https://docs.nexmo.com/api-ref/sms-api/request
-		$url = $URL . "&from=MYRESP&type=unicode&to=" . $g["tel"] .
-			"&text=" . urlencode("⚠" . $_SESSION["address"] . " " . $_SESSION["name"] . " tel:" . $_SESSION["tel"] . " at " . date("c", $ts));
+		$url = $URL . "&from=MYRESP&type=unicode&to=" . my_number($g["tel"]) .
+			"&text=" . urlencode("⚠" . $_SESSION["address"] . " tel:" . $_SESSION["tel"] . " " . $_SESSION["name"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
 		if (file_exists("muted/$id")) {
 		echo "<li><s>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></s></li>";
@@ -132,7 +137,8 @@ if (file_exists($p)) {
 $history = glob("r/$id/alert/*.json");
 rsort($history);
 foreach ($history as $alog) {
-	echo "<li><a href=$alog>" . date("r", basename($alog, ".json")) . "</a></li>";
+	$a = json_decode(file_get_contents($alog), true);
+	echo "<li " . (empty($a["guards"][0]["result"]) ? "class=muted" : "") . "><a href=$alog>" . date("c", basename($alog, ".json")) . "</a></li>\n";
 }
 ?>
 </ol>

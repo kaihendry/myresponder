@@ -59,6 +59,8 @@ if (isset($_GET["ic"])) {
 if(! is_numeric($_SESSION["ic"])) { session_destroy(); die("Invalid IC"); }
 if(! is_numeric($_SESSION["tel"])) { session_destroy(); die("Invalid telephone"); }
 
+// if($_SESSION["tel"][0] != "0" || $_SESSION["tel"][0] != "6") { session_destroy(); die("Invalid Malaysian telephone"); }
+
 $id = $_SESSION["ic"];
 // Record directory
 $rdir = "r/$id";

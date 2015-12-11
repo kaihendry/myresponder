@@ -1,8 +1,6 @@
 <?php
 require_once("../config.php");
 
-$alerts = glob("../h/r/*/alert/*.json");
-rsort($alerts);
 ?>
 
 <table>
@@ -24,7 +22,7 @@ foreach (glob("../h/r/*.json") as $hoj) {
 	$ho = json_decode(file_get_contents($hoj), true);
 ?>
 <tr <?php echo (file_exists("../h/muted/" . $ho["ic"]) ? 'class=unarmed' : 'class=armed');?>>
-<td><a style="text-decoration:none;" href=http://h.uptown.dabase.com/alert.php?<?php echo urlencode(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>>⚠</a></td>
+<td><a style="text-decoration:none;" href=http://h.uptown.dabase.com/alert.php?<?php echo (http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>>⚠</a></td>
 <td>
 <?php
 $ft = date("c", $ho["intime"]);
@@ -57,7 +55,9 @@ echo "<a href=//h.$HOST/r/" . basename($hoj) . "><time datetime=$ft>$ft</time></
 
 
 <?php
-foreach ($alerts as $aj) {
+$alerts = glob("../h/r/*/alert/*.json");
+usort($alerts, create_function('$a,$b', 'return filemtime($a) - filemtime($b);'));
+foreach (array_slice(array_reverse($alerts),0, 20) as $aj) {
 	$a = json_decode(file_get_contents($aj), true);
 ?>
 <tr <?php echo ((empty($a["guards"][0]["result"]) ? "class=muted" : "")); ?>>
