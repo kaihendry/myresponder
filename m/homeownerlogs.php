@@ -3,7 +3,7 @@ require_once("../config.php");
 
 ?>
 
-<table>
+<table class=persons>
 <caption>Registered home owners</caption>
 <thead>
 <tr>
@@ -23,8 +23,8 @@ foreach (glob("../h/r/*.json") as $hoj) {
 	$id = $ho["ic"];
 ?>
 <tr>
-<td><a style="text-decoration:none;" href="http://h.uptown.dabase.com/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
-<td><input id="<?=$id?>" <?php echo (file_exists("../h/arm/$id") ? "checked" : ""); ?> type=checkbox><label for="<?=$id?>">&nbsp;</label></td>
+<td><a style="text-decoration:none;" href="http://h.<?=$HOST?>/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
+<td><input id="<?=$id?>" <?php echo (file_exists("arm/$id") ? "checked" : ""); ?> type=checkbox><label for="<?=$id?>">&nbsp;</label></td>
 <td>
 <?php
 $ft = date("c", $ho["intime"]);

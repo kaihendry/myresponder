@@ -8,9 +8,10 @@ function my_number( $n ){ return (substr($n, 0, 1) == 0) ? "6$n" : $n; }
 
 function alert($id) {
 	global $URL;
+	global $HOST;
 	$ts = time();
 	echo "<h3>Time now: " . date("c") . "</h3>";
-	if (! file_exists("arm/$id")) {
+	if (! file_exists("../m/arm/$id")) {
 	echo "<p>Your alert was un-armed. No guards were alerted. Please contact management.</p>";
 		} else {
 	echo "<p>Raising alert to all responders on duty:</p>";
@@ -26,14 +27,16 @@ function alert($id) {
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
 		// https://docs.nexmo.com/api-ref/sms-api/request
-		$url = $URL . "&from=MYRESP&callback=http://h.uptown.dabase.com/report/&status-report-req=1&type=unicode&to=" . my_number($g["tel"]) .
+		$url = $URL . "&from=MYRESP&callback=http://h.$HOST/report/&status-report-req=1&type=unicode&to=" . my_number($g["tel"]) .
 			"&text=" . urlencode("⚠" . $_SESSION["address"] . " tel:" . $_SESSION["tel"] . " " . $_SESSION["name"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
-		if (! file_exists("arm/$id")) {
-		echo "<li><s>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></s></li>";
+
+		// We need both home owner and guard to be armed to get the SMS
+		if (file_exists("../m/arm/$id") && file_exists("../m/arm/" . $g["ic"])) {
+			echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
+			$result=json_decode(curl_exec($ch), true);
 		} else {
-		echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
-		$result=json_decode(curl_exec($ch), true);
+			echo "<li><s>UNARMED: Not alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></s></li>";
 		}
 		$info = curl_getinfo($ch);
 
@@ -52,7 +55,7 @@ function alert($id) {
 	file_put_contents($alog, je(array("guards" => $guards, "raiser" => $_SESSION)));
 
 	// Now mute until management lift it
-	unlink ("arm/$id");
+	unlink ("../m/arm/$id");
 	}
 
 if (isset($_GET["ic"])) {

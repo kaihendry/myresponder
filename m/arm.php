@@ -1,7 +1,7 @@
 <?php
 
 header('Content-Type: application/json');
-$path = "../h/arm/";
+$path = "arm";
 $id = $_POST["id"];
 
 if (! empty($id) && is_numeric($id)) {
