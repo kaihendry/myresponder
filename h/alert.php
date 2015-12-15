@@ -136,11 +136,23 @@ if (file_exists($p)) {
 <h3>Alert history</h3>
 <ol>
 <?php
+
+function countresults($a) {
+	$count = 0;
+	foreach ($a["guards"] as $g) {
+		if(! empty($g["result"])){
+			$count++;
+		}
+	}
+	return $count;
+}
+
 $history = glob("r/$id/alert/*.json");
 rsort($history);
 foreach ($history as $alog) {
 	$a = json_decode(file_get_contents($alog), true);
-	echo "<li " . (empty($a["guards"][0]["result"]) ? "class=muted" : "") . "><a href=$alog>" . date("c", basename($alog, ".json")) . "</a></li>\n";
+	$c = countresults($a);
+	echo "<li " . (($c == 0) ? "class=muted" : "") . "><a href=$alog>" . date("c", basename($alog, ".json")) . "</a> $c responder(s) notified</li>\n";
 }
 ?>
 </ol>

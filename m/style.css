@@ -10,7 +10,6 @@ table {
 th { text-align: left; }
 td { position: relative; }
 
-table.persons tr th:first-child, table.persons tr td:first-child { width: 1em; }
 
 input[type=checkbox]:checked + label::before {
 	content: "";

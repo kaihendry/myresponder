@@ -7,12 +7,12 @@ require_once("../config.php");
 <caption>Registered home owners</caption>
 <thead>
 <tr>
-<th></th>
 <th>Arm</th>
-<th>Time</th>
+<th>Registered</th>
 <th>Name</th>
 <th>Address</th>
 <th>Telephone</th>
+<th>Trigger</th>
 </tr>
 </thead>
 <tbody>
@@ -23,7 +23,6 @@ foreach (glob("../h/r/*.json") as $hoj) {
 	$id = $ho["ic"];
 ?>
 <tr>
-<td><a style="text-decoration:none;" href="http://h.<?=$HOST?>/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
 <td><input id="<?=$id?>" <?php echo (file_exists("arm/$id") ? "checked" : ""); ?> type=checkbox><label for="<?=$id?>">&nbsp;</label></td>
 <td>
 <?php
@@ -33,6 +32,7 @@ echo "<a href=//h.$HOST/r/" . basename($hoj) . "><time datetime=$ft>$ft</time></
 <td><?=$ho['name']?></td>
 <td><?=$ho['address']?></td>
 <td><a href=tel:<?=$ho['tel']?>><?=$ho['tel']?></a></td>
+<td><a style="text-decoration:none;" href="http://h.<?=$HOST?>/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
 </tr>
 <?php
 }
@@ -56,12 +56,24 @@ echo "<a href=//h.$HOST/r/" . basename($hoj) . "><time datetime=$ft>$ft</time></
 
 
 <?php
+
+function countresults($a) {
+	$count = 0;
+	foreach ($a["guards"] as $g) {
+		if(! empty($g["result"])){
+			$count++;
+		}
+	}
+	return $count;
+}
+
+
 $alerts = glob("../h/r/*/alert/*.json");
 usort($alerts, create_function('$a,$b', 'return filemtime($a) - filemtime($b);'));
 foreach (array_slice(array_reverse($alerts),0, 20) as $aj) {
 	$a = json_decode(file_get_contents($aj), true);
 ?>
-<tr <?php echo ((empty($a["guards"][0]["result"]) ? "class=muted" : "")); ?>>
+<tr <?php echo ((countresults($a) == 0) ? "class=muted" : ""); ?>>
 <td>
 <?php
 $ft = date("c", basename($aj, ".json"));
