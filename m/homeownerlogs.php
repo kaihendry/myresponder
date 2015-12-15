@@ -22,7 +22,7 @@ foreach (glob("../h/r/*.json") as $hoj) {
 	$ho = json_decode(file_get_contents($hoj), true);
 ?>
 <tr <?php echo (file_exists("../h/muted/" . $ho["ic"]) ? 'class=unarmed' : 'class=armed');?>>
-<td><a style="text-decoration:none;" href=http://h.uptown.dabase.com/alert.php?<?php echo (http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>>⚠</a></td>
+<td><a style="text-decoration:none;" href="http://h.uptown.dabase.com/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
 <td>
 <?php
 $ft = date("c", $ho["intime"]);

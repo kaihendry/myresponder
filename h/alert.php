@@ -26,7 +26,7 @@ function alert($id) {
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
 		// https://docs.nexmo.com/api-ref/sms-api/request
-		$url = $URL . "&from=MYRESP&type=unicode&to=" . my_number($g["tel"]) .
+		$url = $URL . "&from=MYRESP&callback=http://h.uptown.dabase.com/report/&status-report-req=1&type=unicode&to=" . my_number($g["tel"]) .
 			"&text=" . urlencode("⚠" . $_SESSION["address"] . " tel:" . $_SESSION["tel"] . " " . $_SESSION["name"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
 		if (file_exists("muted/$id")) {
