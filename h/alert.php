@@ -10,7 +10,7 @@ function alert($id) {
 	global $URL;
 	$ts = time();
 	echo "<h3>Time now: " . date("c") . "</h3>";
-	if (file_exists("muted/$id")) {
+	if (! file_exists("arm/$id")) {
 	echo "<p>Your alert was un-armed. No guards were alerted. Please contact management.</p>";
 		} else {
 	echo "<p>Raising alert to all responders on duty:</p>";
@@ -29,7 +29,7 @@ function alert($id) {
 		$url = $URL . "&from=MYRESP&callback=http://h.uptown.dabase.com/report/&status-report-req=1&type=unicode&to=" . my_number($g["tel"]) .
 			"&text=" . urlencode("⚠" . $_SESSION["address"] . " tel:" . $_SESSION["tel"] . " " . $_SESSION["name"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
-		if (file_exists("muted/$id")) {
+		if (! file_exists("arm/$id")) {
 		echo "<li><s>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></s></li>";
 		} else {
 		echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
@@ -52,7 +52,7 @@ function alert($id) {
 	file_put_contents($alog, je(array("guards" => $guards, "raiser" => $_SESSION)));
 
 	// Now mute until management lift it
-	touch ("muted/$id");
+	unlink ("arm/$id");
 	}
 
 if (isset($_GET["ic"])) {
@@ -101,7 +101,6 @@ if (! file_exists($rdir)) {
 	} else {
 		// First seen
 		echo '<h1>Welcome ' . e($_SESSION["name"]) . '</h1>';
-		touch ("muted/$id");
 	}
 }
 
@@ -115,7 +114,7 @@ if (file_exists($p)) {
 	// Save server info (might be useful)
 	$ci["sin"] = $_SERVER;
 	file_put_contents($p, je($ci));
-	// TODO: Mail management WRT new registration that needs to be un-muted
+	// TODO: Mail management WRT new registration that needs to be armed
 }
 
 ?>

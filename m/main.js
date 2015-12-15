@@ -1,18 +1,20 @@
 window.addEventListener('load', function() {
-	var buttons = document.getElementsByTagName("button");
-	for (var i = 0; i < buttons.length; i++) {
-		buttons[i].addEventListener("click", function( event ) {
+	var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+	for (var i = 0; i < checkboxes.length; i++) {
+		checkboxes[i].addEventListener("click", function( event ) {
 			var that = this;
-			var id = this.getAttribute('data-id');
+			var id = this.getAttribute('id');
 			var r = new XMLHttpRequest();
-			r.open("POST", "mute.php", true);
+			r.open("POST", "arm.php", true);
 			r.onreadystatechange = function () {
 				if (r.readyState != 4 || r.status != 200) return;
 				var status = JSON.parse(r.responseText);
-				if (status.unmuted == id) {
-					that.textContent = "Mute";
+				if (status.unarmed == id) {
+					console.log("unarmed", id, that.checked);
+					that.checked = false;
 				} else {
-					that.textContent = "Unmute";
+					console.log("armed", id, that.checked);
+					that.checked = true;
 				}
 			};
 			var formData = new FormData();

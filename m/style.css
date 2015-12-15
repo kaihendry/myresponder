@@ -3,8 +3,19 @@ body { font-family: sans-serif; }
 .armed { background-color: pink; }
 
 table {
-  border-collapse: collapse;
-  width: 100%;
+	border-collapse: collapse;
+	width: 100%;
 }
 
 th { text-align: left; }
+td { position: relative; }
+
+
+input[type=checkbox]:checked + label::before {
+	content: "";
+	position: absolute;
+	top: 0; bottom: 0; left: 0; right: 0;
+	background-color: pink;
+	z-index: -1;
+}
+
