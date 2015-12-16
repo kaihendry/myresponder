@@ -37,6 +37,7 @@ function alert($id) {
 			$result=json_decode(curl_exec($ch), true);
 		} else {
 			echo "<li><s>UNARMED: Not alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></s></li>";
+			unset($result);
 		}
 		$info = curl_getinfo($ch);
 
@@ -47,12 +48,12 @@ function alert($id) {
 		$info["url"] = $query_params;
 
 		$errinfo = curl_error($ch);
-		array_push($guards, array("result" => $result, "info" => $info, "error" => $errinfo));
+		array_push($guards, array("result" => $result, "info" => $info, "error" => $errinfo, "name" => $g["name"], "ic" => $g["ic"]));
 	}
 	echo "</ul>";
 
 	curl_close($ch);
-	file_put_contents($alog, je(array("guards" => $guards, "raiser" => $_SESSION)));
+	file_put_contents($alog, je(array("ts" => $ts, "guards" => $guards, "raiser" => $_SESSION)));
 
 	// Now mute until management lift it
 	unlink ("../m/arm/$id");

@@ -7,7 +7,20 @@
 <body>
 <div id='container'></div>
 <script id='template' type='text/ractive'>
-<p>Hello, {{raiser.name}}!</p>
+<p>On {{ Date(ts) }}, {{raiser.name}} raised an alert from {{raiser.address}}. The following responders were notified:</p>
+
+<ol>
+{{#guards}}
+{{#result}}
+<li>
+{{#messages}}
+{{name}} <a href=/report/{{this["message-id"]}}.json>SMS delivery report</a>
+{{/messages}}
+</li>
+{{/result}}
+{{/guards}}
+</ol>
+
 </script>
 <script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
 <script>
