@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang='en-GB'>
+<head>
+<meta charset='utf-8'>
+<title>Alert display</title>
+</head>
+<body>
+<div id='container'></div>
+<script id='template' type='text/ractive'>
+<p>Hello, {{raiser.name}}!</p>
+</script>
+<script src='http://cdn.ractivejs.org/latest/ractive.min.js'></script>
+<script>
+// http://h.duroa.dabase.com/adisplay/?j=/r/1234/alert/1450160716.json
+function get(name){
+	if(name=(new RegExp('[?&]'+encodeURIComponent(name)+'=([^&]*)')).exec(location.search))
+	  return decodeURIComponent(name[1]);
+}
+xhr = new XMLHttpRequest();
+xhr.open( 'get', get('j') );
+xhr.onload = function () {
+	var data = JSON.parse( xhr.responseText );
+	var ractive = new Ractive({ el: '#container', template: '#template', data: data });
+}
+xhr.send();
+</script>
+</body>
+</html>
