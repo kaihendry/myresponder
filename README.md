@@ -4,6 +4,7 @@ An opensource PHP project to help dispatch local **guards** in gated
 communities efficiently to a **home owner**'s address.
 
 There are three parties involved in this system:
+
 1. Guard (or "first responder")
 2. Home owner
 3. Management
