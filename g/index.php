@@ -20,9 +20,10 @@ if ($_SESSION["ic"]) {
 
 <form action=/clockin.php method=GET autocomplete=on>
 
-<input required name=ic placeholder="IC">
-<input required name=name placeholder="Name">
-<input required name=tel type=tel placeholder="Mobile number">
+<input required name=ic placeholder="IC" value="<?php echo htmlspecialchars ($_GET['ic'], ENT_QUOTES); ?>">
+<input required name=name placeholder="Name" value="<?php echo htmlspecialchars ($_GET['name'], ENT_QUOTES); ?>">
+<input required name=tel type=tel placeholder="Mobile number" value="<?php echo htmlspecialchars ($_GET['tel'], ENT_QUOTES); ?>">
+
 <input type=submit value="Clock in">
 </form>
 <p>Responders on duty:

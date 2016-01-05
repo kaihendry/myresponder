@@ -21,11 +21,10 @@ if ($_SESSION["address"]) {
 <form action=/alert.php method=GET autocomplete=on>
 
 <!-- https://en.wikipedia.org/wiki/Malaysian_identity_card -->
-<input required name=ic placeholder="IC">
-
-<input required name=name placeholder="Name">
-<input required name=address placeholder="Address">
-<input required name=tel type=tel placeholder="Mobile number">
+<input required name=ic placeholder="IC" value="<?php echo htmlspecialchars ($_GET['ic'], ENT_QUOTES); ?>">
+<input required name=name placeholder="Name" value="<?php echo htmlspecialchars ($_GET['name'], ENT_QUOTES); ?>">
+<input required name=address placeholder="Address" value="<?php echo htmlspecialchars ($_GET['address'], ENT_QUOTES); ?>">
+<input required name=tel type=tel placeholder="Mobile number" value="<?php echo htmlspecialchars ($_GET['tel'], ENT_QUOTES); ?>">
 
 <input type=submit value="Register">
 

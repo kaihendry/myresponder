@@ -25,6 +25,7 @@ if (file_exists($p)) {
 }
 
 // Unset all of the session variables.
+$uri_args = $_SESSION;
 $_SESSION = array();
 
 if (ini_get("session.use_cookies")) {
@@ -37,6 +38,6 @@ if (ini_get("session.use_cookies")) {
 
 if (session_destroy()) {
 	$url = 'http://' . $_SERVER['HTTP_HOST'];
-	header('Location: ' . $url);
+	header("Location: $url?" . http_build_query($uri_args));
 }
 ?>
