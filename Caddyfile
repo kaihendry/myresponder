@@ -1,0 +1,29 @@
+d.uptown:80 {
+	tls hendry@iki.fi
+	root docs
+	markdown
+}
+
+m.uptown:80 {
+	tls hendry@iki.fi
+	root m
+	fastcgi / 127.0.0.1:9000 php
+	log logs/m.duroa.access.log
+	errors logs/m.duroa.error.log
+}
+
+h.uptown:80 {
+	tls hendry@iki.fi
+	root h
+	fastcgi / 127.0.0.1:9000 php
+	log logs/h.duroa.access.log
+	errors logs/h.duroa.error.log
+}
+
+g.uptown:80 {
+	tls hendry@iki.fi
+	root g
+	fastcgi / 127.0.0.1:9000 php
+	log logs/g.duroa.access.log
+	errors logs/g.duroa.error.log
+}

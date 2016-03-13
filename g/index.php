@@ -1,5 +1,7 @@
 <?php
+include("../config.php");
 session_start();
+
 if ($_SESSION["ic"]) {
 	// If there is an existing session, do not bother to login
 	$url = 'http://' . $_SERVER['HTTP_HOST'];

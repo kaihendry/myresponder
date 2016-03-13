@@ -1,4 +1,5 @@
 <?php
+include("../config.php");
 session_start();
 
 // http://stackoverflow.com/a/6534559/4534

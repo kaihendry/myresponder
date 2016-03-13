@@ -1,4 +1,5 @@
 <?php
+include("../config.php");
 session_start();
 
 // If you know the IC you can log that person out
