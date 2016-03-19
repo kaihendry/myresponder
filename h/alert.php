@@ -14,7 +14,7 @@ function alert($id) {
 	$ts = time();
 	echo "<h3>Time now: " . date("c") . "</h3>";
 	if (! file_exists("../m/arm/$id")) {
-	echo "<p>Your alert was un-armed. No guards were alerted. Please contact management.</p>";
+	echo "<p>Your alert was un-armed. No guards were alerted. <a href=mailto:$ADMIN_EMAIL>Email admin to ask to be ARMED, which sends SMSes out to all responders/guards on duty.</a></p>";
 		} else {
 	echo "<p>Raising alert to all responders on duty:</p>";
 	}
@@ -58,9 +58,9 @@ function alert($id) {
 	file_put_contents($alog, je(array("ts" => $ts, "guards" => $guards, "raiser" => $_SESSION)));
 	$headers = "Reply-To: $HOST MyResponder <$ADMIN_EMAIL>";
 	if (empty($result)) {
-	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "UNARMED Alert triggered", "Alert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
+	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "UNARMED Alert triggered for " . $_SESSION["name"], "Alert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
 	} else {
-	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "ARMED Alert triggered", "Alert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
+	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "ARMED Alert triggered for " . $_SESSION["name"], "Alert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
 	}
 
 	// Now mute until management lift it
@@ -121,7 +121,8 @@ if (! file_exists($rdir)) {
 if (file_exists($p)) {
 		alert($id);
 } else {
-	echo "<p>Registering your alert with management. Please save this link to your home screen if you haven't done already.</p>";
+	echo "<p>Registering your alert with management.  
+		Please save this link to your home screen if you haven't done already by <a href=\"//d.$HOST/\" target=\"_blank\">following these instuctions</a>.</p>";
 	// Clock in
 	$ci = $_SESSION;
 	$ci["intime"] = time();
@@ -169,5 +170,7 @@ foreach ($history as $alog) {
 }
 ?>
 </ol>
+<p><a href=mailto:<?=$ADMIN_EMAIL;?>>Email admin</a></p>
+<p><a href="https://github.com/kaihendry/myresponder">Source code</a></p>
 </body>
 </html>
