@@ -10,6 +10,7 @@ function my_number( $n ){ return (substr($n, 0, 1) == 0) ? "6$n" : $n; }
 function alert($id) {
 	global $URL;
 	global $HOST;
+	global $ADMIN_EMAIL;
 	$ts = time();
 	echo "<h3>Time now: " . date("c") . "</h3>";
 	if (! file_exists("../m/arm/$id")) {
@@ -55,14 +56,21 @@ function alert($id) {
 
 	curl_close($ch);
 	file_put_contents($alog, je(array("ts" => $ts, "guards" => $guards, "raiser" => $_SESSION)));
+	$headers = "Reply-To: $HOST MyResponder <$ADMIN_EMAIL>";
+	if (empty($result)) {
+	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "UNARMED Alert triggered", "Alert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
+	} else {
+	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "ARMED Alert triggered", "Alert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
+	}
 
 	// Now mute until management lift it
-	unlink ("../m/arm/$id");
+	@unlink ("../m/arm/$id");
 	}
 
 if (isset($_GET["ic"])) {
 	$_SESSION["ic"] =  preg_replace("/[^0-9]/", "", $_GET["ic"]);
 	$_SESSION["name"] = substr($_GET["name"], 0, 64);
+	$_SESSION["email"] = filter_var($_GET["email"], FILTER_SANITIZE_EMAIL);
 	$_SESSION["address"] = substr($_GET["address"], 0, 64);
 	$_SESSION["tel"] = preg_replace("/[^0-9]/", "", $_GET["tel"]);
 }
@@ -75,6 +83,7 @@ if (empty($_GET["ic"])) { // We need to ensure we are always a GET request to en
 	$data = array('ic'=> $_SESSION["ic"],
 		'name'=> $_SESSION["name"],
 		'address'=> $_SESSION["address"],
+		'email'=> $_SESSION["email"],
 		'tel'=> $_SESSION["tel"]);
 	$url = 'https://' . $_SERVER['HTTP_HOST'] . "/alert.php?" . http_build_query($data);
 	header('Location: ' . $url);
@@ -127,6 +136,8 @@ if (file_exists($p)) {
 <dl>
     <dt>Name</dt>
     <dd><?php echo $_SESSION["name"];?></dd>
+    <dt>Email</dt>
+    <dd><?php echo $_SESSION["email"];?></dd>
     <dt>Address</dt>
     <dd><?php echo $_SESSION["address"];?></dd>
     <dt>Telephone</dt>

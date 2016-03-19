@@ -91,6 +91,7 @@ if (file_exists($p)) {
 	// Save server info (might be useful)
 	$ci["sin"] = $_SERVER;
 	file_put_contents($p, json_encode($ci, JSON_PRETTY_PRINT));
+	mail($ADMIN_EMAIL, "Responder " . $_SESSION["name"] . " registered for duty", "https://g.$HOST/" . $p);
 	echo "<p>" . display($p) . "</p>";
 }
 

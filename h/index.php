@@ -22,6 +22,7 @@ if ($_SESSION["address"]) {
 <!-- https://en.wikipedia.org/wiki/Malaysian_identity_card -->
 <input required name=ic placeholder="IC" value="<?php echo htmlspecialchars ($_GET['ic'], ENT_QUOTES); ?>">
 <input required name=name placeholder="Name" value="<?php echo htmlspecialchars ($_GET['name'], ENT_QUOTES); ?>">
+<input required name=email placeholder="Email" type=email value="<?php echo htmlspecialchars ($_GET['email'], ENT_QUOTES); ?>">
 <input required name=address placeholder="Address" value="<?php echo htmlspecialchars ($_GET['address'], ENT_QUOTES); ?>">
 <input required name=tel type=tel placeholder="Mobile number" value="<?php echo htmlspecialchars ($_GET['tel'], ENT_QUOTES); ?>">
 
