@@ -14,7 +14,7 @@
 {{#result}}
 <li>
 {{#messages}}
-{{name}} <a href=/report/{{this["message-id"]}}.json>SMS delivery report</a>
+{{name}} {{#this["message-id"]}} <a href=/report/{{this["message-id"]}}.json>SMS delivery report</a>{{/this["message-id"]}}
 {{/messages}}
 </li>
 {{/result}}
