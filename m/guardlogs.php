@@ -4,7 +4,7 @@ require_once("../config.php");
 ?>
 
 <table class=persons>
-<caption>Responders</caption>
+<caption>Responders 🏃</caption>
 <thead>
 <tr>
 <th>Arm</th>

@@ -4,7 +4,7 @@ require_once("../config.php");
 ?>
 
 <table class=persons>
-<caption>Registered home owners</caption>
+<caption>Registered home owners 👨‍👩‍👧‍👦</caption>
 <thead>
 <tr>
 <th>Arm</th>
@@ -27,7 +27,7 @@ foreach (glob("../h/r/*.json") as $hoj) {
 <td>
 <?php
 $ft = date("c", $ho["intime"]);
-echo "<a href=//h.$HOST/r/" . basename($hoj) . "><time datetime=$ft>$ft</time></a>"; ?>
+echo "<a href=\"//h.$HOST/r/" . basename($hoj) . "\"><time datetime=\"$ft\">$ft</time></a>"; ?>
 </td>
 <td><?=$ho['name']?></td>
 <td><?=$ho['address']?></td>
@@ -42,7 +42,7 @@ echo "<a href=//h.$HOST/r/" . basename($hoj) . "><time datetime=$ft>$ft</time></
 </table>
 
 <table>
-<caption>Incidents</caption>
+<caption>Incidents 🚨</caption>
 <thead>
 <tr>
 <th>Time</th>
@@ -77,7 +77,7 @@ foreach (array_slice(array_reverse($alerts),0, 20) as $aj) {
 <td>
 <?php
 $ft = date("c", basename($aj, ".json"));
-echo "<a href=//h.$HOST/adisplay/?j=/r/" . substr($aj, 7) . "><time datetime=$ft>$ft</time></a>"; ?>
+echo "<a href=\"//h.$HOST/adisplay/?j=/r/" . substr($aj, 7) . "\"><time datetime=$ft>$ft</time></a>"; ?>
 </td>
 <td><?=$a["raiser"]["name"]?></td>
 <td><?=$a["raiser"]["address"]?></td>

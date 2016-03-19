@@ -45,7 +45,7 @@ function display($r) {
 <html>
 <head>
 <meta charset="utf-8">
-<title>Punched in <?php echo session_id();?></title>
+<title>Punched in</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <link href="/style.css" rel="stylesheet">
 </head>
