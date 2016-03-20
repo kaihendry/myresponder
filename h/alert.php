@@ -58,9 +58,9 @@ function alert($id) {
 	file_put_contents($alog, je(array("ts" => $ts, "guards" => $guards, "raiser" => $_SESSION)));
 	$headers = "Reply-To: $HOST MyResponder <$ADMIN_EMAIL>";
 	if (empty($result)) {
-	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "UNARMED Alert triggered for " . $_SESSION["name"], "Alert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
+	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "UNARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
 	} else {
-	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "ARMED Alert triggered for " . $_SESSION["name"], "Alert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
+	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "ARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
 	}
 
 	// Now mute until management lift it
