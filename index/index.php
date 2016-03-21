@@ -8,9 +8,9 @@ require_once("../config.php");
 <title><?=$HOST;?> Malaysian Responder</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <link href="//h.<?=$HOST;?>/style.css" rel="stylesheet">
-<script src=main.js></script>
 </head>
 <body>
+<p><a href=//d.<?=$HOST;?>>Documentation</a></p>
 <p><a href=//h.<?=$HOST;?>>Home owner interface</a></p>
 <p><a href=//g.<?=$HOST;?>>Guard/responder interface</a></p>
 <p><a href=//m.<?=$HOST;?>>Management interface</a></p>

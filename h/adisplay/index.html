@@ -7,10 +7,10 @@
 <body>
 <div id='container'></div>
 <script id='template' type='text/ractive'>
-<p>On {{ Date(ts) }}, {{raiser.name}} raised an alert from {{raiser.address}}. The following responders were notified:</p>
+<p>On {{ Date(alert.ts) }}, {{alert.raiser.name}} raised an alert from {{alert.raiser.address}}. The following responders were notified:</p>
 
 <ol>
-{{#guards}}
+{{#alert.guards}}
 {{#result}}
 <li>
 {{#messages}}
@@ -21,6 +21,8 @@
 {{/guards}}
 </ol>
 
+<p><a href={{url}}>Alert details</a></p>
+
 </script>
 <script src='/ractive.min.js'></script>
 <script>
@@ -29,10 +31,11 @@ function get(name){
 	  return decodeURIComponent(name[1]);
 }
 xhr = new XMLHttpRequest();
-xhr.open( 'get', get('j') );
+url = get('j');
+xhr.open( 'get', url );
 xhr.onload = function () {
 	var data = JSON.parse( xhr.responseText );
-	var ractive = new Ractive({ el: '#container', template: '#template', data: data });
+	var ractive = new Ractive({ el: '#container', template: '#template', data: { alert: data, url: url } });
 }
 xhr.send();
 </script>
