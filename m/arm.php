@@ -13,10 +13,10 @@ if (! empty($id) && is_numeric($id)) {
 		}
 	} else {
 		@mkdir($path);
-		if (! file_put_contents("$path/$id", $_SERVER['REMOTE_ADDR'])) {
-			http_response_code(400);
-		} else {
+		if (file_put_contents("$path/$id", $_SERVER['REMOTE_ADDR'])) {
 			echo json_encode(array("armed" => $id));
+		} else {
+			http_response_code(400);
 		}
 	}
 } else {
