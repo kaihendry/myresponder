@@ -146,6 +146,7 @@ if (file_exists($p)) {
 </dl>
 
 <p><a href=/logout.php>Change details</a></p>
+<p><a href=mailto:<?=$ADMIN_EMAIL;?>>Email admin</a></p>
 
 <h3>Alert history</h3>
 <ol>
@@ -170,7 +171,6 @@ foreach ($history as $alog) {
 }
 ?>
 </ol>
-<p><a href=mailto:<?=$ADMIN_EMAIL;?>>Email admin</a></p>
 <p><a href="https://github.com/kaihendry/myresponder">Source code</a></p>
 </body>
 </html>
