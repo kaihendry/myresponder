@@ -1,29 +1,29 @@
-d.uptown:80 {
-	tls hendry@iki.fi
+d.myresponder.local:8080 {
+	tls off
 	root docs
 	markdown
 }
 
-m.uptown:80 {
-	tls hendry@iki.fi
+m.myresponder.local:8080 {
+	tls off
 	root m
 	fastcgi / 127.0.0.1:9000 php
-	log logs/m.duroa.access.log
-	errors logs/m.duroa.error.log
+	log logs/m.access.log
+	errors logs/m.error.log
 }
 
-h.uptown:80 {
-	tls hendry@iki.fi
+h.myresponder.local:8080 {
+	tls off
 	root h
 	fastcgi / 127.0.0.1:9000 php
-	log logs/h.duroa.access.log
-	errors logs/h.duroa.error.log
+	log logs/h.access.log
+	errors logs/h.error.log
 }
 
-g.uptown:80 {
-	tls hendry@iki.fi
+g.myresponder.local:8080 {
+	tls off
 	root g
 	fastcgi / 127.0.0.1:9000 php
-	log logs/g.duroa.access.log
-	errors logs/g.duroa.error.log
+	log logs/g.access.log
+	errors logs/g.error.log
 }

@@ -7,7 +7,7 @@
 <body>
 <div id='container'></div>
 <script id='template' type='text/ractive'>
-<p>On {{ Date(alert.ts) }}, {{alert.raiser.name}} raised an alert from {{alert.raiser.address}}. The following responders were notified:</p>
+<p>On {{ alert.formatDate(alert.ts) }}, {{alert.raiser.name}} raised an alert from {{alert.raiser.address}}. The following responders were notified:</p>
 
 <ol>
 {{#alert.guards}}
@@ -35,6 +35,10 @@ url = get('j');
 xhr.open( 'get', url );
 xhr.onload = function () {
 	var data = JSON.parse( xhr.responseText );
+	data.formatDate = function ( seconds ) {
+		var d = new Date(seconds * 1000);
+		return d.toString();
+	}
 	var ractive = new Ractive({ el: '#container', template: '#template', data: { alert: data, url: url } });
 }
 xhr.send();

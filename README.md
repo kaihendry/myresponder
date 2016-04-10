@@ -18,7 +18,7 @@ Other features:
 
 ## Series of videos explaining the development & demonstrating its use
 
-* [[docs/]]
+* [Documentation](docs/index.md)
 * <http://natalian.org/2015/11/29/Neighbourhood_watch_on_the_Web/>
 * [2015-12-08](https://www.youtube.com/watch?v=sGvBI6qp2-4) - development design
 * [2015-12-10](https://www.youtube.com/watch?v=XO6dpLzrWlo) - working demo
