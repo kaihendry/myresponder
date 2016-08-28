@@ -92,7 +92,14 @@ if (file_exists($p)) {
 	// Save server info (might be useful)
 	$ci["sin"] = $_SERVER;
 	file_put_contents($p, json_encode($ci, JSON_PRETTY_PRINT));
-	sesmail("", "Responder " . $_SESSION["name"] . " registered for duty", "https://g." . getenv('HOST') . "/" . $p);
+try {
+	$msgid = sesmail("", "Responder " . $_SESSION["name"] . " registered for duty", "https://g." . getenv('HOST') . "/" . $p);
+	echo ("<p>Notified admin, reference: " . $msgid . "</p>");
+} catch (Exception $e) {
+	die("<h1>ERROR</h1><pre>" . $e->getMessage()."\n");
+}
+
+
 	echo "<p>" . display($p) . "</p>";
 }
 

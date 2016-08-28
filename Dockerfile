@@ -2,11 +2,19 @@ FROM abiosoft/caddy:php
 MAINTAINER Kai Hendry <hendry@iki.fi>
 
 RUN composer require aws/aws-sdk-php
-ADD Caddyfile /etc/Caddyfile
 
 RUN mkdir /srv/logs
 
+ADD http://momentjs.com/downloads/moment.min.js /srv/m/moment.min.js
+ADD http://cdn.ractivejs.org/latest/ractive.min.js /srv/h/ractive.min.js
+
+ADD Caddyfile /etc/Caddyfile
+
+ARG COMMIT
+ENV COMMIT ${COMMIT}
+
 ADD config.php /srv
+ADD sesmail.php /srv
 
 ADD index /srv/index
 # d.$HOST - docs
@@ -17,11 +25,5 @@ ADD m /srv/m
 ADD h /srv/h
 # g.$HOST for guards
 ADD g /srv/g
-
-ADD http://momentjs.com/downloads/moment.min.js /srv/m/moment.min.js
-ADD http://cdn.ractivejs.org/latest/ractive.min.js /srv/h/ractive.min.js
-
-ARG COMMIT
-ENV COMMIT ${COMMIT}
 
 VOLUME /srv/data

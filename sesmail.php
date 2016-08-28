@@ -5,7 +5,9 @@ use Aws\Ses\SesClient;
 
 function sesMail($to, $subject, $message) {
 
-$fromAdr = getenv("FROM");
+if (empty($to)) {
+	$to = "hendry@iki.fi";
+}
 
 $SesClient = new Aws\Ses\SesClient([
 	'version'   =>  'latest',
@@ -30,9 +32,8 @@ $result = $SesClient->sendEmail([
 			'Data' => $subject,
 		],
 	],
-	'ReplyToAddresses' => [getenv("M_EMAIL")],
-	'ReturnPath' => $fromAdr,
-	'Source' => $fromAdr,
+	'ReturnPath' => getenv("M_EMAIL"),
+	'Source' => getenv("M_EMAIL"),
 ]);
 
 return $result['MessageId'];

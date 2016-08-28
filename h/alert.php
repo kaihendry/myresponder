@@ -56,7 +56,7 @@ function alert($id) {
 	curl_close($ch);
 	file_put_contents($alog, je(array("ts" => $ts, "guards" => $guards, "raiser" => $_SESSION)));
 	if (empty($result)) {
-	sesmail($_SESSION["email"], "UNARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h. " . getenv('HOST') . "/adisplay/?j=/$alog");
+	sesmail($_SESSION["email"], "UNARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h." . getenv('HOST') . "/adisplay/?j=/$alog");
 	} else {
 	sesmail($_SESSION["email"], "ARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h." . getenv('HOST') . "/adisplay/?j=/$alog");
 	}
@@ -169,6 +169,6 @@ foreach ($history as $alog) {
 }
 ?>
 </ol>
-<p><a href="https://github.com/kaihendry/myresponder">Source code</a></p>
+<footer><a href=https://github.com/kaihendry/myresponder>MIT licensed source code</a> version <?php echo getenv("COMMIT"); ?> </footer>
 </body>
 </html>
