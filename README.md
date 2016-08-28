@@ -22,7 +22,7 @@ Other features:
 
 	HOST=myresponder.local
 	M_USER=duroa
-	M_PASS=cactus
+	M_PASS=SECRET
 	M_EMAIL=verifyme@email.com
 	SMS_URL=https://rest.nexmo.com/sms/json?api_key=6bfec75d&api_secret=SECRET
 	TZ=Asia/Singapore
