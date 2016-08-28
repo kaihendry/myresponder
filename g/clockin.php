@@ -1,5 +1,6 @@
 <?php
-include("../config.php");
+require_once("../config.php");
+require_once("../sesmail.php");
 session_start();
 
 // http://stackoverflow.com/a/6534559/4534
@@ -91,7 +92,7 @@ if (file_exists($p)) {
 	// Save server info (might be useful)
 	$ci["sin"] = $_SERVER;
 	file_put_contents($p, json_encode($ci, JSON_PRETTY_PRINT));
-	mail($ADMIN_EMAIL, "Responder " . $_SESSION["name"] . " registered for duty", "https://g.$HOST/" . $p);
+	sesmail("", "Responder " . $_SESSION["name"] . " registered for duty", "https://g." . getenv('HOST') . "/" . $p);
 	echo "<p>" . display($p) . "</p>";
 }
 

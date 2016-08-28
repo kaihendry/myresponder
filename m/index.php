@@ -16,5 +16,6 @@ include("homeownerlogs.php");
 //include("wwwlogs.php");
 ?>
 
+<footer><a href=https://github.com/kaihendry/myresponder>MIT licensed source code</a> version <?php echo getenv("COMMIT"); ?> </footer>
 </body>
 </html>

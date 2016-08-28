@@ -30,6 +30,6 @@ if ($_SESSION["address"]) {
 
 </form>
 
-<p><a href=https://github.com/kaihendry/clockin>MIT licensed source code</a></p>
+<footer><a href=https://github.com/kaihendry/myresponder>MIT licensed source code</a> version <?php echo getenv("COMMIT"); ?> </footer>
 </body>
 </html>

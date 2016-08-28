@@ -1,18 +1,27 @@
-d.myresponder.local:8080 {
+{$HOST} {
+	startup php-fpm
 	tls off
-	root docs
+	root index
+	fastcgi / 127.0.0.1:9000 php
+}
+
+d.{$HOST} {
+	tls off
+	root /srv/docs
 	markdown
 }
 
-m.myresponder.local:8080 {
+m.{$HOST} {
+
 	tls off
 	root m
+	basicauth / {$M_USER} {$M_PASS}
 	fastcgi / 127.0.0.1:9000 php
 	log logs/m.access.log
 	errors logs/m.error.log
 }
 
-h.myresponder.local:8080 {
+h.{$HOST} {
 	tls off
 	root h
 	fastcgi / 127.0.0.1:9000 php
@@ -20,7 +29,7 @@ h.myresponder.local:8080 {
 	errors logs/h.error.log
 }
 
-g.myresponder.local:8080 {
+g.{$HOST} {
 	tls off
 	root g
 	fastcgi / 127.0.0.1:9000 php

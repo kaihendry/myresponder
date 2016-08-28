@@ -49,5 +49,5 @@ restricted to members only.
 
 <img style="width: 100%;" src=http://s.natalian.org/2016-03-21/homescreen.png alt="IOS Add to homescreen steps">
 
-Enter <https://h.duroa.dabase.com/> on your mobile's browser and you will be
+Enter <https://h.{$HOST}/> on your mobile's browser and you will be
 required to register.

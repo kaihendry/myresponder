@@ -27,12 +27,12 @@ foreach (glob("../h/r/*.json") as $hoj) {
 <td>
 <?php
 $ft = date("c", $ho["intime"]);
-echo "<a href=\"//h.$HOST/r/" . basename($hoj) . "\"><time datetime=\"$ft\">$ft</time></a>"; ?>
+echo "<a href=\"//h." . getenv('HOST') . "/r/" . basename($hoj) . "\"><time datetime=\"$ft\">$ft</time></a>"; ?>
 </td>
 <td><?=$ho['name']?></td>
 <td><?=$ho['address']?></td>
 <td><a href=tel:<?=$ho['tel']?>><?=$ho['tel']?></a></td>
-<td><a style="text-decoration:none;" href="http://h.<?=$HOST?>/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
+<td><a style="text-decoration:none;" href="http://h.<?=getenv('HOST')?>/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
 </tr>
 <?php
 }
@@ -77,7 +77,7 @@ foreach (array_slice(array_reverse($alerts),0, 20) as $aj) {
 <td>
 <?php
 $ft = date("c", basename($aj, ".json"));
-echo "<a href=\"//h.$HOST/adisplay/?j=/r/" . substr($aj, 7) . "\"><time datetime=$ft>$ft</time></a>"; ?>
+echo "<a href=\"//h." . getenv('HOST') . "/adisplay/?j=/r/" . substr($aj, 7) . "\"><time datetime=$ft>$ft</time></a>"; ?>
 </td>
 <td><?=$a["raiser"]["name"]?></td>
 <td><?=$a["raiser"]["address"]?></td>

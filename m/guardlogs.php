@@ -23,15 +23,15 @@ foreach (glob("../g/r/*.json") as $rfn) {
 ?>
 <tr>
 <td><input id="<?=$id?>" <?php echo (file_exists("arm/$id") ? "checked" : ""); ?> type=checkbox><label for="<?=$id?>">&nbsp;</label></td>
-<td><?php echo "<a href=//g.$HOST/". substr($rfn, 5) . "><time datetime=" . date("c", $r['intime']) . ">" . date("c", $r['intime']) . "</time>"; ?></a></td>
+<td><?php echo "<a href=//g." . getenv('HOST') . "/". substr($rfn, 5) . "><time datetime=" . date("c", $r['intime']) . ">" . date("c", $r['intime']) . "</time>"; ?></a></td>
 <td><?=$r['name']?></td>
 <td><a href=tel:<?=$r['tel']?>><?=$r['tel']?></a></td>
-<td><a style="text-decoration:none;" href="http://g.<?=$HOST?>/clockin.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $r["ic"], "tel" => $r["tel"], "name" => $r["name"] ))); ?>">💂</a></td>
+<td><a style="text-decoration:none;" href="http://g.<?=getenv('HOST')?>/clockin.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $r["ic"], "tel" => $r["tel"], "name" => $r["name"] ))); ?>">💂</a></td>
 </tr>
 
 
 <?php
-	// echo "<li><a href=//g.$HOST/". substr($responder,5) . ">" . basename($responder) . "</a></li>";
+	// echo "<li><a href=//g." . getenv('HOST') "/". substr($responder,5) . ">" . basename($responder) . "</a></li>";
 }
 ?>
 

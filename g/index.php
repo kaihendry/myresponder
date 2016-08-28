@@ -28,7 +28,7 @@ if ($_SESSION["ic"]) {
 
 <input type=submit value="Clock in">
 </form>
-<p>Responders on duty:
+<p>Registered responders:
 <?php echo count(glob("r/*.json")); ?>
 </p>
 

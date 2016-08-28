@@ -1,7 +1,8 @@
 <?php
 
 header('Content-Type: application/json');
-include_once("../config.php");
+require_once("../config.php");
+require_once("../sesmail.php");
 
 $path = "arm";
 $id = $_POST["id"];
@@ -21,7 +22,7 @@ if (! empty($id) && is_numeric($id)) {
 				// error_log( print_r( $h, true ) );
 				if (filter_var($h["email"], FILTER_VALIDATE_EMAIL)) {
 					// error_log("Mail home owner " . $h["email"]);
-					mail($h["email"] . ",$ADMIN_EMAIL", "Alert for " . $h["name"] . " ARMED", "Visiting saved https://h.$HOST bookmark will trigger an alarm.");
+					sesMail($h["email"], "Alert for " . $h["name"] . " ARMED", "Visiting Webpage again will trigger an alarm.");
 				}
 			}
 			echo json_encode(array("armed" => $id));

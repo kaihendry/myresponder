@@ -1,20 +1,19 @@
 <?php
 session_start();
 require_once("../config.php");
+require_once("../sesmail.php");
 
 function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
 function je( $obj ){ return json_encode($obj, JSON_PRETTY_PRINT); }
+
 // Malaysian numbers
 function my_number( $n ){ return (substr($n, 0, 1) == 0) ? "6$n" : $n; }
 
 function alert($id) {
-	global $URL;
-	global $HOST;
-	global $ADMIN_EMAIL;
 	$ts = time();
 	echo "<h3>Time now: " . date("c") . "</h3>";
 	if (! file_exists("../m/arm/$id")) {
-	echo "<p>Your alert was un-armed. No guards were alerted. <a href=mailto:$ADMIN_EMAIL>Email admin to ask to be ARMED, which sends SMSes out to all responders/guards on duty.</a></p>";
+	echo "<p>Your alert was un-armed. No guards were alerted. <a href=mailto:" . getenv("M_EMAIL") . ">Email admin to ask to be ARMED, which sends SMSes out to all responders/guards on duty.</a></p>";
 		} else {
 	echo "<p>Raising alert to all responders on duty:</p>";
 	}
@@ -29,7 +28,7 @@ function alert($id) {
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
 		// https://docs.nexmo.com/api-ref/sms-api/request
-		$url = $URL . "&from=MYRESP&callback=https://h.$HOST/report/&status-report-req=1&type=unicode&to=" . my_number($g["tel"]) .
+		$url = getenv('SMS_URL') . "&from=MYRESP&callback=https://h." . getenv('HOST') . "/report/&status-report-req=1&type=unicode&to=" . my_number($g["tel"]) .
 			"&text=" . urlencode("⚠" . $_SESSION["address"] . " tel:" . $_SESSION["tel"] . " " . $_SESSION["name"] . " at " . date("c", $ts));
 		curl_setopt($ch, CURLOPT_URL, $url);
 
@@ -56,11 +55,10 @@ function alert($id) {
 
 	curl_close($ch);
 	file_put_contents($alog, je(array("ts" => $ts, "guards" => $guards, "raiser" => $_SESSION)));
-	$headers = "Reply-To: $HOST MyResponder <$ADMIN_EMAIL>";
 	if (empty($result)) {
-	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "UNARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
+	sesmail($_SESSION["email"], "UNARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h. " . getenv('HOST') . "/adisplay/?j=/$alog");
 	} else {
-	mail($_SESSION["email"] . ",$ADMIN_EMAIL", "ARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h.$HOST/adisplay/?j=/$alog", $headers);
+	sesmail($_SESSION["email"], "ARMED Alert triggered for " . $_SESSION["name"], "Telephone number: " . $_SESSION["tel"] . "\nAlert details: https://h." . getenv('HOST') . "/adisplay/?j=/$alog");
 	}
 
 	// Now mute until management lift it
@@ -122,7 +120,7 @@ if (file_exists($p)) {
 		alert($id);
 } else {
 	echo "<p>Registering your alert with management.  
-		Please save this link to your home screen if you haven't done already by <a href=\"//d.$HOST/\" target=\"_blank\">following these instuctions</a>.</p>";
+		Please save this link to your home screen if you haven't done already by <a href=\"//d." . getenv('HOST') . "/\" target=\"_blank\">following these instuctions</a>.</p>";
 	// Clock in
 	$ci = $_SESSION;
 	$ci["intime"] = time();
@@ -146,7 +144,7 @@ if (file_exists($p)) {
 </dl>
 
 <p><a href=/logout.php>Change details</a></p>
-<p><a href=mailto:<?=$ADMIN_EMAIL;?>>Email admin</a></p>
+<p><a href=mailto:<?=getenv('M_EMAIL')?>>Email admin</a></p>
 
 <h3>Alert history</h3>
 <ol>
