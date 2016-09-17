@@ -5,6 +5,7 @@
 <title>Management</title>
 <meta name=viewport content="width=device-width, initial-scale=1">
 <link href="style.css" rel="stylesheet">
+<link rel="icon" sizes="180x180" href="/apple-touch-icon.png">
 <script src=moment.min.js></script>
 <script src=main.js></script>
 </head>
