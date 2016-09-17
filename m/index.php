@@ -7,6 +7,7 @@
 <link href="style.css" rel="stylesheet">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <script src=moment.min.js></script>
 <script src=main.js></script>
 </head>
