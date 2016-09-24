@@ -9,7 +9,7 @@ build: check
 	docker build -t $(REPO) --build-arg COMMIT=$(shell git describe --always) .
 
 start:
-	docker run -d --name $(NAME) --env-file envfile -v /home/hendry/tmp/myresponder/data:/srv/data $(REPO)
+	docker run -d --name $(NAME) --env-file envfile -p 80:80 -v /home/hendry/tmp/myresponder/data:/srv/data $(REPO)
 
 stop:
 	docker stop $(NAME)

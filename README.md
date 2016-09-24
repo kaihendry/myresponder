@@ -74,10 +74,15 @@ Then you need to link to the container and do a transparent proxy like so:
 		errors stdout
 	}
 
+To simulate new .local addresses, you need to do something like:
+
+	$ avahi-publish -a -R myresponder.local 192.168.1.25
+	Established under name 'myresponder.local'
+	$ avahi-publish -a -R m.myresponder.local 192.168.1.25
+	Established under name 'm.myresponder.local'
+
 ## Series of videos explaining the development & demonstrating its use
 
 * [Documentation](docs/index.md)
-* <http://natalian.org/2015/11/29/Neighbourhood_watch_on_the_Web/>
-* [2015-12-08](https://www.youtube.com/watch?v=sGvBI6qp2-4) - development design
-* [2015-12-10](https://www.youtube.com/watch?v=XO6dpLzrWlo) - working demo
-* [2015-12-18](https://youtu.be/-e3hWW9HeIU) - alerting with a physical button
+* <https://natalian.org/2015/11/29/Neighbourhood_watch_on_the_Web/>
+* [MyResponder Youtube playlist](https://www.youtube.com/playlist?list=PLiKgVPlhUNuyKRfZayi0LLcq7i9l3yOtE)
