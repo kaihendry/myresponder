@@ -1,13 +1,13 @@
 <?php
 session_start();
 require_once("../config.php");
-require_once("../sesmail.php");
+require_once("../aws-helpers.php");
 
 function e( $text ){ return htmlspecialchars( $text, ENT_QUOTES, 'UTF-8' ); }
 function je( $obj ){ return json_encode($obj, JSON_PRETTY_PRINT); }
 
 // Malaysian numbers
-function my_number( $n ){ return (substr($n, 0, 1) == 0) ? "6$n" : $n; }
+function my_number( $n ){ return (substr($n, 0, 1) == 0) ? "+6$n" : "+$n"; }
 
 function alert($id) {
 	$ts = time();
@@ -27,29 +27,17 @@ function alert($id) {
 	$guards = array();
 	foreach (glob("../g/r/*.json") as $gj) {
 		$g = json_decode(file_get_contents($gj), true);
-		// https://docs.nexmo.com/api-ref/sms-api/request
-		$url = getenv('SMS_URL') . "&from=MYRESP&callback=https://h." . getenv('HOST') . "/report/&status-report-req=1&type=unicode&to=" . my_number($g["tel"]) .
-			"&text=" . urlencode("⚠" . $_SESSION["address"] . " tel:" . $_SESSION["tel"] . " " . $_SESSION["name"] . " at " . date("c", $ts));
-		curl_setopt($ch, CURLOPT_URL, $url);
 
 		// We need both home owner and guard to be armed to get the SMS
 		if (file_exists("../m/arm/$id") && file_exists("../m/arm/" . $g["ic"])) {
 			echo "<li>Alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></li>";
-			$result=json_decode(curl_exec($ch), true);
+			$result = sms(my_number($g["tel"]), "⚠" . $_SESSION["address"] . " tel:" . $_SESSION["tel"] . " " . $_SESSION["name"] . " at " . date("c", $ts));
 		} else {
 			echo "<li><s>UNARMED: Not alerting " . $g["name"] . " on <a href=\"tel:" . $g["tel"] . "\">" . $g["tel"] . "</a></s></li>";
 			unset($result);
 		}
-		$info = curl_getinfo($ch);
 
-		// Nasty crap to remove api secret
-		$p = parse_url($info["url"], PHP_URL_QUERY);
-		parse_str($p, $query_params);
-		unset($query_params["api_secret"]);
-		$info["url"] = $query_params;
-
-		$errinfo = curl_error($ch);
-		array_push($guards, array("result" => $result, "info" => $info, "error" => $errinfo, "name" => $g["name"], "ic" => $g["ic"]));
+		array_push($guards, array("result" => $result, "name" => $g["name"], "ic" => $g["ic"]));
 	}
 	echo "</ul>";
 

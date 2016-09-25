@@ -14,7 +14,7 @@ ARG COMMIT
 ENV COMMIT ${COMMIT}
 
 ADD config.php /srv
-ADD sesmail.php /srv
+ADD aws-helpers.php /srv
 
 ADD index /srv/index
 # d.$HOST - docs

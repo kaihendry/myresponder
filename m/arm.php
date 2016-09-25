@@ -2,7 +2,7 @@
 
 header('Content-Type: application/json');
 require_once("../config.php");
-require_once("../sesmail.php");
+require_once("../aws-helpers.php");
 
 $path = "arm";
 $id = $_POST["id"];

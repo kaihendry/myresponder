@@ -6,7 +6,7 @@ use Aws\Ses\SesClient;
 function sesMail($to, $subject, $message) {
 
 if (empty($to)) {
-	$to = "hendry@iki.fi";
+	$to = "hendry+myresponder@iki.fi";
 }
 
 $SesClient = new Aws\Ses\SesClient([
@@ -35,6 +35,32 @@ $result = $SesClient->sendEmail([
 	'ReturnPath' => getenv("M_EMAIL"),
 	'Source' => getenv("M_EMAIL"),
 ]);
+
+return $result['MessageId'];
+
+}
+
+use Aws\Sns\SnsClient;
+
+function sms($number, $message) {
+
+if (empty($number) || empty($message)) {
+	return false;
+}
+
+$SnsClient = new Aws\Sns\SnsClient([
+	'version'   =>  'latest',
+	'region'    =>  "ap-southeast-1"
+]);
+
+$result = $SnsClient->publish(array(
+	'Message'   =>  $message,
+	'PhoneNumber'   =>  $number,
+	'MessageAttributes' => array(
+		'AWS.SNS.SMS.SMSType' => array('StringValue'=>'Transactional','DataType'=>'String'),
+		'AWS.SNS.SMS.SenderID' => array('StringValue' => explode('.', getenv('HOST'), 2)[0], 'DataType' => 'String')
+	),
+));
 
 return $result['MessageId'];
 

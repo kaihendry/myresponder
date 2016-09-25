@@ -1,6 +1,6 @@
 <?php
 require_once("../config.php");
-require_once("../sesmail.php");
+require_once("../aws-helpers.php");
 session_start();
 
 // http://stackoverflow.com/a/6534559/4534
