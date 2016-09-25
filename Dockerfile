@@ -26,4 +26,7 @@ ADD h /srv/h
 # g.$HOST for guards
 ADD g /srv/g
 
+USER root
+RUN chmod -R a+rx /srv/
+
 VOLUME /srv/data
