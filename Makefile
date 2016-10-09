@@ -9,11 +9,10 @@ build: check
 	docker build -t $(REPO) --build-arg COMMIT=$(shell git describe --always) .
 
 start:
-	docker run -d --name $(NAME) --env-file envfile -p 80:80 -v /home/hendry/tmp/myresponder/data:/srv/data $(REPO)
+	docker run --rm --name $(NAME) --env-file envfile -p 80:80 -p 443:443 -v $(PWD)/data:/srv/data -v $(HOME)/.caddy:/root/.caddy $(REPO)
 
 stop:
 	docker stop $(NAME)
-	docker rm $(NAME)
 
 sh:
 	docker exec -it $(NAME) /bin/sh

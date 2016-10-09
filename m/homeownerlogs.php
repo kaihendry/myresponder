@@ -32,7 +32,7 @@ echo "<a href=\"//h." . getenv('HOST') . "/r/" . basename($hoj) . "\"><time date
 <td><?=$ho['name']?></td>
 <td><?=$ho['address']?></td>
 <td><a href=tel:<?=$ho['tel']?>><?=$ho['tel']?></a></td>
-<td><a style="text-decoration:none;" href="http://h.<?=getenv('HOST')?>/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
+<td><a style="text-decoration:none;" href="//h.<?=getenv('HOST')?>/alert.php?<?php echo htmlspecialchars(http_build_query(array("ic" => $ho["ic"], "address" => $ho["address"], "tel" => $ho["tel"], "name" => $ho["name"] ))); ?>">⚠</a></td>
 </tr>
 <?php
 }

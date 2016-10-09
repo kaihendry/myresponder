@@ -2,7 +2,7 @@
 session_start();
 if ($_SESSION["address"]) {
 	// If there is an existing session, do not bother to login
-	$url = 'http://' . $_SERVER['HTTP_HOST'];
+	$url = '//' . $_SERVER['HTTP_HOST'];
 	header('Location: ' . $url . "/alert.php");
 	die();
 }

@@ -58,7 +58,7 @@ $result = $SnsClient->publish(array(
 	'PhoneNumber'   =>  $number,
 	'MessageAttributes' => array(
 		'AWS.SNS.SMS.SMSType' => array('StringValue'=>'Transactional','DataType'=>'String'),
-		'AWS.SNS.SMS.SenderID' => array('StringValue' => explode('.', getenv('HOST'), 2)[0], 'DataType' => 'String')
+		'AWS.SNS.SMS.SenderID' => array('StringValue' => substr(explode('.', getenv('HOST'), 2)[0],0,10), 'DataType' => 'String')
 	),
 ));
 

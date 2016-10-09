@@ -24,55 +24,11 @@ Other features:
 	M_USER=duroa
 	M_PASS=SECRET
 	M_EMAIL=verifyme@email.com
-	SMS_URL=https://rest.nexmo.com/sms/json?api_key=6bfec75d&api_secret=SECRET
 	TZ=Asia/Singapore
 	# M_EMAIL needs to be verfied!
 	AWS_ACCESS_KEY_ID=AKIAJPZG5CILK47K132
 	AWS_SECRET_ACCESS_KEY=SECRET
-	REGION=us-west-2
-
-Then you need to link to the container and do a transparent proxy like so:
-
-	myresponder.local:80 {
-		tls off
-		proxy / myresponder:80 {
-			transparent
-		}
-		log stdout
-		errors stdout
-	}
-	d.myresponder.local:80 {
-		tls off
-		proxy / myresponder:80 {
-			transparent
-		}
-		log stdout
-		errors stdout
-	}
-	m.myresponder.local:80 {
-		tls off
-		proxy / myresponder:80 {
-			transparent
-		}
-		log stdout
-		errors stdout
-	}
-	g.myresponder.local:80 {
-		tls off
-		proxy / myresponder:80 {
-			transparent
-		}
-		log stdout
-		errors stdout
-	}
-	h.myresponder.local:80 {
-		tls off
-		proxy / myresponder:80 {
-			transparent
-		}
-		log stdout
-		errors stdout
-	}
+	REGION=us-west-2 # for AWS SES
 
 To simulate new .local addresses, you need to do something like:
 

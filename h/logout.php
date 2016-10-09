@@ -37,7 +37,7 @@ if (ini_get("session.use_cookies")) {
 }
 
 if (session_destroy()) {
-	$url = 'http://' . $_SERVER['HTTP_HOST'];
+	$url = '//' . $_SERVER['HTTP_HOST'];
 	header("Location: $url?" . http_build_query($uri_args));
 }
 ?>
