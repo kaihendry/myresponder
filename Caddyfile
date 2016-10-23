@@ -1,18 +1,18 @@
-{$HOST} {
+{$HOST}:80 {
 	startup php-fpm
-	tls {$M_EMAIL}
+	tls off
 	root index
 	fastcgi / 127.0.0.1:9000 php
 }
 
-d.{$HOST} {
-	tls {$M_EMAIL}
+d.{$HOST}:80 {
+	tls off
 	root /srv/docs
 	markdown
 }
 
-m.{$HOST} {
-	tls {$M_EMAIL}
+m.{$HOST}:80 {
+	tls off
 	root m
 	basicauth / {$M_USER} {$M_PASS}
 	fastcgi / 127.0.0.1:9000 php
@@ -20,16 +20,16 @@ m.{$HOST} {
 	errors logs/m.error.log
 }
 
-h.{$HOST} {
-	tls {$M_EMAIL}
+h.{$HOST}:80 {
+	tls off
 	root h
 	fastcgi / 127.0.0.1:9000 php
 	log logs/h.access.log
 	errors logs/h.error.log
 }
 
-g.{$HOST} {
-	tls {$M_EMAIL}
+g.{$HOST}:80 {
+	tls off
 	root g
 	fastcgi / 127.0.0.1:9000 php
 	log logs/g.access.log
