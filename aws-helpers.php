@@ -1,6 +1,5 @@
 <?php
 
-require '/srv/vendor/autoload.php';
 use Aws\Ses\SesClient;
 
 function sesMail($to, $subject, $message) {

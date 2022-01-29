@@ -5,7 +5,7 @@ REPO=hendry/$(NAME)
 
 all: build
 
-build: check
+build:
 	docker build -t $(REPO) --build-arg COMMIT=$(shell git describe --always) .
 
 start:

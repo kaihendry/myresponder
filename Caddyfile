@@ -1,5 +1,5 @@
 {$HOST}:80 {
-	startup php-fpm
+	on startup php-fpm7 # php variant only
 	tls off
 	root index
 	fastcgi / 127.0.0.1:9000 php
@@ -16,22 +16,18 @@ m.{$HOST}:80 {
 	root m
 	basicauth / {$M_USER} {$M_PASS}
 	fastcgi / 127.0.0.1:9000 php
-	log logs/m.access.log
-	errors logs/m.error.log
 }
 
 h.{$HOST}:80 {
 	tls off
+	log stdout
+	errors stdout
 	root h
 	fastcgi / 127.0.0.1:9000 php
-	log logs/h.access.log
-	errors logs/h.error.log
 }
 
 g.{$HOST}:80 {
 	tls off
 	root g
 	fastcgi / 127.0.0.1:9000 php
-	log logs/g.access.log
-	errors logs/g.error.log
 }
